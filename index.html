@@ -1,10 +1,38 @@
-<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>STRIKE PIXEL // СЕКРЕТНЫЙ ПРОТОКОЛ</title>
-<meta name="description" content="STRIKE PIXEL — постапокалиптическая пиксельная игра про выживание в зараженном городе.">
+<title>STRIKE PIXEL -- пиксельная игра про выживание в зомби-апокалипсисе</title>
+<meta name="description" content="STRIKE PIXEL -- постапокалиптическая пиксельная игра про выживание в заражённом городе. Отряд, враги, карта радиации и живая история проекта в разработке.">
+<meta name="keywords" content="Strike Pixel, зомби игра, пиксельная игра, survival игра, зомби апокалипсис, инди игра, пиксель арт">
+<meta name="author" content="Малик">
+<meta name="robots" content="index, follow">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%233d5817'/%3E%3Crect x='3' y='5' width='3' height='3' fill='%23000'/%3E%3Crect x='10' y='5' width='3' height='3' fill='%23000'/%3E%3Crect x='4' y='10' width='8' height='2' fill='%237a1414'/%3E%3C/svg%3E">
+
+<!-- Open Graph / соцсети -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="STRIKE PIXEL -- пиксельная игра про выживание в зомби-апокалипсисе">
+<meta property="og:description" content="Отряд выживших, база данных врагов, карта радиации. Проект в разработке -- следи за статусом.">
+<meta property="og:locale" content="ru_RU">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="STRIKE PIXEL">
+<meta name="twitter:description" content="Постапокалиптическая пиксельная игра про выживание в заражённом городе.">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "VideoGame",
+  "name": "Strike Pixel",
+  "description": "Постапокалиптическая пиксельная игра про выживание в заражённом городе.",
+  "genre": ["Survival", "Horror"],
+  "inLanguage": "ru",
+  "gamePlatform": "PC"
+}
+</script>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
 <style>
@@ -318,6 +346,117 @@
     font-family: 'Press Start 2P', monospace; font-size: 9px; padding: 8px 12px; cursor: pointer;
   }
   .terminal-btn:hover { background: var(--toxic); color: #000; }
+  .terminal-input-row{
+    display:flex; align-items:center; gap:8px;
+    border-top:1px dashed rgba(160,32,160,0.35);
+    padding-top:12px; margin-bottom:14px;
+  }
+  .terminal-prompt{ color: var(--toxic-glow); font-size:14px; }
+  .terminal-input{
+    flex:1; background:transparent; border:none; outline:none;
+    color: var(--toxic-glow); font-family:'VT323', monospace; font-size:20px;
+    border-bottom:1px solid var(--toxic);
+  }
+  .terminal-input::placeholder{ color:#6b4b6b; }
+
+  /* Screen glitch on secret command */
+  @keyframes screenGlitch{
+    0%{ filter:none; transform:translate(0,0); }
+    20%{ filter:hue-rotate(90deg) contrast(1.4); transform:translate(-3px,2px); }
+    40%{ filter:invert(0.1); transform:translate(3px,-2px); }
+    60%{ filter:hue-rotate(-60deg); transform:translate(-2px,-1px); }
+    100%{ filter:none; transform:translate(0,0); }
+  }
+  body.screen-glitch{ animation: screenGlitch 0.4s steps(2); }
+
+  /* Katana Zero nod - neon flash */
+  @keyframes neonFlashKf{
+    0%{ filter:none; }
+    25%{ filter: saturate(2.2) hue-rotate(260deg) brightness(1.15); }
+    50%{ filter: saturate(2.5) hue-rotate(180deg) brightness(1.3); }
+    75%{ filter: saturate(2) hue-rotate(300deg) brightness(1.1); }
+    100%{ filter:none; }
+  }
+  body.neon-flash{ animation: neonFlashKf 0.9s ease-in-out; }
+
+  /* Konami code overlay */
+  .konami-overlay{
+    position:fixed; inset:0; z-index:20000;
+    background:rgba(5,7,4,0.95);
+    display:flex; align-items:center; justify-content:center;
+    padding:24px;
+    opacity:0; pointer-events:none;
+    transition:opacity .3s ease;
+  }
+  .konami-overlay.show{ opacity:1; pointer-events:auto; }
+  .konami-box{
+    max-width:520px; text-align:center;
+    border:3px solid var(--toxic);
+    background:#141a0c;
+    padding:36px 26px;
+    box-shadow:0 0 40px rgba(160,32,160,0.4), 8px 8px 0 var(--ink);
+  }
+  .konami-skull{ font-size:56px; color:var(--blood-bright); margin-bottom:16px; animation: pulse 1.6s ease-in-out infinite; }
+  .konami-title{ font-size:16px; color:var(--toxic-glow); margin-bottom:18px; letter-spacing:1px; }
+  .konami-text{ font-size:20px; color:#c9c4a8; margin:10px 0; }
+  .konami-lore{ font-size:12px; color:var(--bone); line-height:1.8; margin:20px 0; }
+
+  /* ---------- SPOILERS ---------- */
+  .spoiler-grid{
+    display:grid; grid-template-columns:repeat(auto-fit, minmax(240px,1fr)); gap:20px;
+  }
+  .spoiler-card{
+    background:#141a0c; border:3px solid var(--blood); padding:20px;
+    cursor:pointer; position:relative; min-height:110px;
+    box-shadow: 5px 5px 0 var(--ink);
+  }
+  .spoiler-tag{ font-size:10px; color:var(--blood-bright); margin-bottom:10px; letter-spacing:1px; }
+  .spoiler-text{
+    font-size:19px; line-height:1.4; color:#d8d4bf;
+    filter: blur(6px); user-select:none; transition: filter .25s ease;
+  }
+  .spoiler-card::after{
+    content:"нажми, чтобы прочитать";
+    position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+    font-family:'Press Start 2P', monospace; font-size:10px; color:var(--toxic-glow);
+    text-align:center; padding:20px; background:rgba(13,15,8,0.55);
+    opacity:1; transition:opacity .25s ease;
+  }
+  .spoiler-card.revealed .spoiler-text{ filter:none; user-select:auto; }
+  .spoiler-card.revealed::after{ opacity:0; pointer-events:none; }
+
+  /* ---------- RADIATION MAP ---------- */
+  .rad-map{
+    display:grid;
+    grid-template-columns:repeat(8, 1fr);
+    gap:3px;
+    max-width:520px;
+    margin:0 auto;
+    background:#000;
+    padding:6px;
+    border:3px solid var(--swamp);
+  }
+  .rad-tile{
+    aspect-ratio:1;
+    cursor:pointer;
+    transition:transform .1s ease;
+  }
+  .rad-tile:hover{ transform:scale(1.12); outline:2px solid var(--bone); z-index:2; position:relative; }
+  .rad-safe{ background:#2f4a13; }
+  .rad-low{ background:#5c7d1f; }
+  .rad-mid{ background:#c98a1e; }
+  .rad-high{ background:var(--blood-bright); }
+  .rad-max{ background:var(--toxic); }
+  .rad-legend{
+    display:flex; flex-wrap:wrap; gap:16px; justify-content:center;
+    margin-top:18px; font-size:16px; color:#c9c4a8;
+  }
+  .rad-legend div{ display:flex; align-items:center; gap:6px; }
+  .rad-dot{ width:14px; height:14px; display:inline-block; border:1px solid #000; }
+  .rad-info{
+    margin-top:22px; background:#141a0c; border:2px dashed var(--blood);
+    padding:16px 20px; font-size:20px; color:var(--bone); max-width:520px; margin-left:auto; margin-right:auto; text-align:center;
+  }
 
   /* ---------- MYSTERY ---------- */
   .mystery{
@@ -356,7 +495,9 @@
     <button class="tab-btn" onclick="switchTab(event, 'tab-squad')">02. ОТРЯД</button>
     <button class="tab-btn" onclick="switchTab(event, 'tab-enemies')">03. ВРАГИ</button>
     <button class="tab-btn" onclick="switchTab(event, 'tab-rules')">04. ПРАВИЛА</button>
-    <button class="tab-btn" onclick="switchTab(event, 'tab-terminal')">05. ТЕРМИНАЛ</button>
+    <button class="tab-btn" onclick="switchTab(event, 'tab-map')">05. КАРТА</button>
+    <button class="tab-btn" onclick="switchTab(event, 'tab-terminal')">06. ТЕРМИНАЛ</button>
+    <button class="tab-btn" onclick="switchTab(event, 'tab-spoilers')">07. СПОЙЛЕРЫ</button>
   </div>
 
   <div id="tab-story" class="tab-pane active">
@@ -422,9 +563,72 @@
         <p>Не нападает сам -- визгом созывает всех заражённых в округе прямо к отряду.</p>
       </div>
       <div class="enemy-card">
+        <div class="threat">УГРОЗА: СРЕДНЯЯ</div>
+        <h3>Зомби-сталкер</h3>
+        <p>Носит старую противогазную маску и плюётся кислотой на расстоянии. Быстро бегает, умеет запрыгивать на препятствия, царапается и кусается -- но здоровья у него немного.</p>
+      </div>
+      <div class="enemy-card">
+        <div class="threat">УГРОЗА: ВЫСОКАЯ</div>
+        <h3>Палач</h3>
+        <p>Тяжёлый противник с топором в руках. Бегать не умеет, зато держит огромный запас здоровья и одним ударом решает исход ближнего боя.</p>
+      </div>
+      <div class="enemy-card">
+        <div class="threat">УГРОЗА: ВЫСОКАЯ</div>
+        <h3>Безликий</h3>
+        <p>Не видит и не слышит, кусаться не может -- но заражает одним царапаньем и разгоняется до 40 км/ч. Спастись бегством от него не получится.</p>
+      </div>
+      <div class="enemy-card">
+        <div class="threat">УГРОЗА: СРЕДНЯЯ</div>
+        <h3>Вздутый</h3>
+        <p>Медлительный и не умеет бегать, зато при смерти взрывается кислотой, нанося до 30 урона всем поблизости. Может схватить жертву и швырнуть на землю.</p>
+      </div>
+      <div class="enemy-card">
+        <div class="threat">УГРОЗА: ВЫСОКАЯ</div>
+        <h3>Душитель</h3>
+        <p>Криворукое и кривоногое существо. Двигается странно и неуклюже, но стоит ему схватить жертву -- он душит голыми руками, не оставляя шанса вырваться.</p>
+      </div>
+      <div class="enemy-card">
+        <div class="threat">УГРОЗА: ВЫСОКАЯ</div>
+        <h3>Берсерк</h3>
+        <p>Ходит в окровавленном халате, вооружён ножом и одной мутировавшей рукой, которой пронзает противников. Бегать не может, но здоровья у него в избытке.</p>
+      </div>
+      <div class="enemy-card">
+        <div class="threat">УГРОЗА: НИЗКАЯ</div>
+        <h3>Обычный зомби</h3>
+        <p>Самый рядовой заражённый: кусается, царапается, бегает небыстро. Всего 50 очков здоровья, но опасен большими группами.</p>
+      </div>
+      <div class="enemy-card">
+        <div class="threat">УГРОЗА: НИЗКАЯ</div>
+        <h3>Ползун</h3>
+        <p>Ноги отказали ещё на ранней стадии заражения, поэтому передвигается по земле. Медленный и слабый, но подкрадывается почти бесшумно и хватает за ноги.</p>
+      </div>
+      <div class="enemy-card">
+        <div class="threat">УГРОЗА: НИЗКАЯ</div>
+        <h3>Толстяк</h3>
+        <p>Раздутое и неповоротливое тело. Бегать не умеет и бьёт слабо, зато обладает на удивление большим запасом здоровья для рядового зомби.</p>
+      </div>
+      <div class="enemy-card">
+        <div class="threat">УГРОЗА: СРЕДНЯЯ</div>
+        <h3>Психопат</h3>
+        <p>Руки туго связаны, зато выносливости хватает надолго. Кусается, если подобраться слишком близко, и почти не устаёт от погони.</p>
+      </div>
+      <div class="enemy-card">
+        <div class="threat">УГРОЗА: ВЫСОКАЯ</div>
+        <h3>Ведьма</h3>
+        <p>Быстрая и хитрая -- призывает на помощь обычных зомби и способна стать невидимой на 10 секунд, чтобы зайти со спины.</p>
+      </div>
+      <div class="enemy-card">
         <div class="threat">УГРОЗА: НЕИЗВЕСТНА</div>
         <h3>Пациент Ноль</h3>
         <p>Первый заражённый. Его никто не видел живьём -- только следы. Возможно, именно он и есть источник вспышки.</p>
+      </div>
+    </div>
+
+    <div class="terminal-box" style="margin-top:30px;">
+      <div class="section-label pixel-font" style="margin-bottom:14px;">СИМУЛЯТОР // СЛУЧАЙНАЯ ВСТРЕЧА</div>
+      <div class="terminal-output" id="encounterOutput">> Нажми кнопку, чтобы узнать, кто вышел навстречу отряду из темноты...</div>
+      <div class="terminal-controls">
+        <button class="terminal-btn" onclick="rollEncounter()">[ КОГО МЫ ВСТРЕТИЛИ? ]</button>
       </div>
     </div>
   </div>
@@ -441,14 +645,67 @@
     </ol>
   </div>
 
+  <div id="tab-map" class="tab-pane">
+    <div class="section-label pixel-font">СПУТНИК // РАДИАЦИОННЫЙ ФОН</div>
+    <h2>Карта зоны заражения</h2>
+    <p style="font-size:19px; color:#c9c4a8; margin-bottom:20px;">Наведи курсор на сектор, чтобы узнать уровень радиации и что там находится.</p>
+    <div class="rad-map" id="radMap"></div>
+    <div class="rad-legend">
+      <div><span class="rad-dot rad-safe"></span> Безопасно</div>
+      <div><span class="rad-dot rad-low"></span> Низкий фон</div>
+      <div><span class="rad-dot rad-mid"></span> Средний фон</div>
+      <div><span class="rad-dot rad-high"></span> Высокий фон</div>
+      <div><span class="rad-dot rad-max"></span> Эпицентр</div>
+    </div>
+    <div id="radInfo" class="rad-info">Сектор не выбран.</div>
+  </div>
+
+  <div id="tab-spoilers" class="tab-pane">
+    <div class="section-label pixel-font">УТЕЧКА // НЕ ДЛЯ ПОСТОРОННИХ ГЛАЗ</div>
+    <h2>Спойлеры разработки</h2>
+    <p style="font-size:19px; color:#c9c4a8; margin-bottom:20px;">Эти карточки размыты специально. Нажми на любую, если готов узнать больше, чем должен.</p>
+
+    <div class="spoiler-grid">
+      <div class="spoiler-card" onclick="this.classList.toggle('revealed')">
+        <div class="spoiler-tag pixel-font">СПОЙЛЕР 01</div>
+        <div class="spoiler-text">Пациент Ноль -- не первая жертва вспышки. Он был первым, кто согласился на эксперимент добровольно.</div>
+      </div>
+      <div class="spoiler-card" onclick="this.classList.toggle('revealed')">
+        <div class="spoiler-tag pixel-font">СПОЙЛЕР 02</div>
+        <div class="spoiler-text">В финале игроку предстоит выбор: уничтожить единственный прототип антидота или попытаться спасти заражённый город целиком.</div>
+      </div>
+      <div class="spoiler-card" onclick="this.classList.toggle('revealed')">
+        <div class="spoiler-tag pixel-font">СПОЙЛЕР 03</div>
+        <div class="spoiler-text">Айрис знал про лабораторию ещё до вспышки -- и умолчал об этом перед отрядом.</div>
+      </div>
+      <div class="spoiler-card" onclick="this.classList.toggle('revealed')">
+        <div class="spoiler-tag pixel-font">СПОЙЛЕР 04</div>
+        <div class="spoiler-text">Рихтер способен временно замедлять восприятие времени в момент прицельного выстрела -- геймплейная фишка снайпера.</div>
+      </div>
+      <div class="spoiler-card" onclick="this.classList.toggle('revealed')">
+        <div class="spoiler-tag pixel-font">СПОЙЛЕР 05</div>
+        <div class="spoiler-text">Помимо промзоны, в игре появится вторая, полностью затопленная зона города -- с собственными видами заражённых.</div>
+      </div>
+      <div class="spoiler-card" onclick="this.classList.toggle('revealed')">
+        <div class="spoiler-tag pixel-font">СПОЙЛЕР 06</div>
+        <div class="spoiler-text">У Калдерона будет секретная концовка, если пройти всю игру, ни разу не потеряв бойца.</div>
+      </div>
+    </div>
+  </div>
+
   <div id="tab-terminal" class="tab-pane">
     <div class="section-label pixel-font">СЕКРЕТНЫЙ ДОСТУП // ЛОГОВО ХАКЕРА</div>
     <h2>Терминал связи</h2>
     <p style="font-size: 20px; color: #c9c4a8;">Запрос данных из закрытого бункера лаборатории...</p>
     <div class="terminal-box">
-      <div class="terminal-output" id="terminalOutput">> Станция онлайн. Введите команду для сканирования секторов...</div>
+      <div class="terminal-output" id="terminalOutput">> Станция онлайн. Введите команду или нажмите одну из кнопок ниже.<br>> Наберите <span style="color:var(--bone)">help</span>, если не знаете, с чего начать...</div>
+      <div class="terminal-input-row">
+        <span class="terminal-prompt pixel-font">&gt;</span>
+        <input type="text" id="terminalInput" class="terminal-input" placeholder="введите команду..." autocomplete="off">
+      </div>
       <div class="terminal-controls">
         <button class="terminal-btn" onclick="termCommand('scan')">[СКАНИРОВАТЬ СЕКТОР]</button>
+        <button class="terminal-btn" onclick="termCommand('database')">[БАЗА ВРАГОВ]</button>
         <button class="terminal-btn" onclick="termCommand('purge')">[ОЧИСТИТЬ КЭШ]</button>
         <button class="terminal-btn" onclick="termCommand('help')">[ПОМОЩЬ]</button>
       </div>
@@ -465,7 +722,7 @@
 
 <footer>
   <div class="footer-title">STRIKE PIXEL</div>
-  страница проекта · сделано с нуля с уважением команда MailGames[span_0](start_span)[span_0](end_span)
+  фан-страница проекта · с уважением команда MailGames
 </footer>
 
 <script>
@@ -552,15 +809,51 @@
     playBeep();
     const out = document.getElementById('terminalOutput');
     let text = "";
-    if(cmd === 'scan') {
+    const c = cmd.trim().toLowerCase();
+    if(c === 'scan') {
       text = "> [УСПЕХ] Обнаружено 3 выживших в радиусе 12км. Уровень заражения: КРИТИЧЕСКИЙ.";
-    } else if(cmd === 'purge') {
+    } else if(c === 'purge') {
       text = "> [ВНИМАНИЕ] Протокол очистки запущен. Память очищена от следов заражения.";
+    } else if(c === 'database' || c === 'база' || c === 'враги') {
+      text = "> [БАЗА ВРАГОВ] 13 типов заражённых занесено в реестр. Открой вкладку «03. ВРАГИ» для полного досье.";
+    } else if(c === 'map' || c === 'карта') {
+      text = "> [КАРТА] Спутниковый снимок зоны доступен во вкладке «05. КАРТА».";
+    } else if(c === 'help' || c === 'помощь') {
+      text = "> Команды: scan, database, map, purge, help. ...и, возможно, есть команды, которых нет в этом списке.";
+    } else if(c === 'кто такой пациент ноль' || c === 'пациент ноль' || c === 'patient zero' || c === 'zero') {
+      text = "> [ДОСТУП ОГРАНИЧЕН] Файл повреждён. Видно только одну строку: «...он был первым добровольцем...» [ОСТАЛЬНОЕ УДАЛЕНО]";
+      glitchScreen();
+    } else if(c === 'katana' || c === 'katana zero' || c === 'катана' || c === 'катана зеро') {
+      text = "> [ПОСТОРОННИЙ СИГНАЛ] Кто-то взломал канал из другой реальности... Неон, додзё, флешбэк на 3 секунды назад. Похоже, тут кто-то любит замедлять время так же, как и мы.";
+      neonFlash();
+    } else if(c === '') {
+      return;
     } else {
-      text = "> Доступные команды: [scan] - поиск сигналов, [purge] - сброс системы.";
+      text = "> Неизвестная команда: «" + cmd + "». Наберите help.";
     }
     out.innerHTML += "<br>" + text;
     out.scrollTop = out.scrollHeight;
+  }
+
+  function glitchScreen(){
+    document.body.classList.add('screen-glitch');
+    setTimeout(() => document.body.classList.remove('screen-glitch'), 400);
+  }
+
+  function neonFlash(){
+    document.body.classList.add('neon-flash');
+    setTimeout(() => document.body.classList.remove('neon-flash'), 900);
+  }
+
+  const termInputEl = document.getElementById('terminalInput');
+  if(termInputEl){
+    termInputEl.addEventListener('keydown', (e) => {
+      if(e.key === 'Enter'){
+        const val = termInputEl.value;
+        termCommand(val);
+        termInputEl.value = '';
+      }
+    });
   }
 
   // Timer simulation
@@ -612,6 +905,97 @@
     setTimeout(typeLoop, deleting ? 35 : 65);
   }
   typeLoop();
+
+  // ---------- RADIATION MAP ----------
+  const radSectors = [
+    {level:'safe', name:'Пригород', note:'Тихо, почти безопасно.'},
+    {level:'safe', name:'База отряда', note:'Убежище Strike Pixel. Здесь можно отдышаться.'},
+    {level:'low', name:'Жилые кварталы', note:'Заброшенные дома, редкие Бегуны.'},
+    {level:'low', name:'Мост', note:'Путь на эвакуацию, пока под контролем.'},
+    {level:'mid', name:'Торговый центр', note:'Много припасов, но шумно и людно от заражённых.'},
+    {level:'mid', name:'Метро', note:'Тёмные тоннели, короткий, но рискованный путь.'},
+    {level:'high', name:'Госпиталь', note:'Медикаменты и высокая плотность заражённых.'},
+    {level:'high', name:'Заброшенный завод', note:'Логово Громил и Палачей.'},
+    {level:'high', name:'Канализация', note:'Здесь чаще всего видели Безликих.'},
+    {level:'max', name:'Промзона', note:'Эпицентр вспышки. Источник заражения где-то здесь.'},
+    {level:'max', name:'Лаборатория', note:'Вход опечатан. Что внутри -- неизвестно.'}
+  ];
+  const radMapEl = document.getElementById('radMap');
+  const radInfoEl = document.getElementById('radInfo');
+  if(radMapEl){
+    for(let i=0;i<40;i++){
+      const sector = radSectors[Math.floor(Math.random()*radSectors.length)];
+      const tile = document.createElement('div');
+      tile.className = 'rad-tile rad-' + sector.level;
+      tile.addEventListener('click', () => {
+        const levelNames = {safe:'Безопасно', low:'Низкий фон', mid:'Средний фон', high:'Высокий фон', max:'ЭПИЦЕНТР'};
+        radInfoEl.innerHTML = '<strong>' + sector.name + '</strong> -- ' + levelNames[sector.level] + '<br>' + sector.note;
+        playBeep();
+      });
+      radMapEl.appendChild(tile);
+    }
+  }
+
+  // ---------- ENCOUNTER GENERATOR ----------
+  const encounterList = [
+    'Бегун выскакивает из-за угла с диким рёвом.',
+    'Громила проламывает стену в двух шагах от отряда.',
+    'Крикун замечает вас и запрокидывает голову -- сейчас будет визг.',
+    'Зомби-сталкер поднимает голову в противогазной маске и плюёт кислотой.',
+    'Палач медленно выходит из тени, волоча топор по земле.',
+    'Безликий разворачивается на звук шагов -- и срывается с места на полной скорости.',
+    'Вздутый покачивается навстречу -- лучше не подпускать его слишком близко.',
+    'Душитель неуклюже ковыляет вперёд, странно вывернув руки.',
+    'Берсерк вскидывает мутировавшую руку и делает шаг вперёд.',
+    'Обычный зомби бредёт прямо на отряд.',
+    'Ползун бесшумно подтягивается по земле и хватает за лодыжку.',
+    'Толстяк неповоротливо разворачивается на шум шагов.',
+    'Психопат с связанными руками щёлкает зубами издалека.',
+    'Ведьма хихикает где-то рядом -- а затем пропадает из виду.',
+    'Тишина. Сектор чист... пока что.'
+  ];
+  function rollEncounter(){
+    playBeep();
+    const out = document.getElementById('encounterOutput');
+    const pick = encounterList[Math.floor(Math.random()*encounterList.length)];
+    out.innerHTML += '<br>> ' + pick;
+    out.scrollTop = out.scrollHeight;
+  }
 </script>
+
+<div id="konamiOverlay" class="konami-overlay">
+  <div class="konami-box">
+    <div class="konami-skull pixel-font">☠</div>
+    <div class="konami-title pixel-font">СКРЫТЫЙ КАНАЛ НАЙДЕН</div>
+    <p class="konami-text">Ты ввёл код, о котором знают только настоящие геймеры.</p>
+    <p class="konami-text">За это -- обрывок файла, которого нет ни в одной вкладке:</p>
+    <p class="konami-lore pixel-font">«...ПАЦИЕНТ НОЛЬ БЫЛ НЕ ЖЕРТВОЙ. ОН БЫЛ ПЕРВЫМ, КТО СОГЛАСИЛСЯ...»</p>
+    <button class="terminal-btn" onclick="closeKonami()">[ ЗАКРЫТЬ КАНАЛ ]</button>
+  </div>
+</div>
+
+<script>
+  (function(){
+    const seq = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
+    let pos = 0;
+    window.addEventListener('keydown', (e) => {
+      const key = e.key.length === 1 ? e.key.toLowerCase() : e.key;
+      if(key === seq[pos]){
+        pos++;
+        if(pos === seq.length){
+          pos = 0;
+          document.getElementById('konamiOverlay').classList.add('show');
+          try{ playBeep(); }catch(err){}
+        }
+      } else {
+        pos = (key === seq[0]) ? 1 : 0;
+      }
+    });
+  })();
+  function closeKonami(){
+    document.getElementById('konamiOverlay').classList.remove('show');
+  }
+</script>
+
 </body>
-</html>  
+</html>      
