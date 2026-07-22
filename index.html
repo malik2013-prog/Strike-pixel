@@ -431,6 +431,25 @@
   .spoiler-card.revealed .spoiler-text{ filter:none; user-select:auto; }
   .spoiler-card.revealed::after{ opacity:0; pointer-events:none; }
 
+  /* ---------- FAQ ---------- */
+  .faq-list{ max-width:720px; margin:0 auto; }
+  .faq-item{
+    border:2px solid var(--swamp); background:#141a0c;
+    margin-bottom:14px; padding:16px 18px; cursor:pointer;
+  }
+  .faq-q{
+    font-size:13px; color:var(--toxic-glow); letter-spacing:0.5px;
+    display:flex; justify-content:space-between; align-items:center;
+  }
+  .faq-q::after{ content:"+"; font-size:18px; color:var(--bone); }
+  .faq-item.open .faq-q::after{ content:"−"; }
+  .faq-a{
+    font-size:19px; color:#c9c4a8; line-height:1.5;
+    max-height:0; overflow:hidden; opacity:0;
+    transition: max-height .3s ease, opacity .3s ease, margin-top .3s ease;
+  }
+  .faq-item.open .faq-a{ max-height:300px; opacity:1; margin-top:12px; }
+
   /* ---------- RADIATION MAP ---------- */
   .rad-map{
     display:grid;
@@ -505,13 +524,14 @@
     <button class="tab-btn" onclick="switchTab(event, 'tab-map')">05. КАРТА</button>
     <button class="tab-btn" onclick="switchTab(event, 'tab-terminal')">06. ТЕРМИНАЛ</button>
     <button class="tab-btn" onclick="switchTab(event, 'tab-spoilers')">07. СПОЙЛЕРЫ</button>
+    <button class="tab-btn" onclick="switchTab(event, 'tab-faq')">08. FAQ</button>
   </div>
 
   <div id="tab-story" class="tab-pane active">
     <div class="section-label pixel-font">ДОСЬЕ // СЮЖЕТ</div>
     <h2>Как всё началось</h2>
     <div class="story">
-      <p>Вспышка началась в промзоне на окраине города -- заражённый штамм вырвался из лаборатории за одну ночь. К утру улицы были уже не безопасны, а связь с центром пропала.</p>
+      <p>Вспышка началась в промзоне на окраине города -- заражённый штамм вырвался из лаборатории за одну ночь. К утренним часам улицы были уже не безопасны, а связь с центром пропала.</p>
       <p>Из уцелевших выживших собрался маленький отряд -- <strong>Strike Pixel</strong>. Их цель -- не просто выжить, а найти источник заражения и остановить его, пока зона не поглотила весь город.</p>
       <p>Каждый день -- это выбор: рискнуть ради припасов или отступить и сохранить отряд. Каждая миссия приближает либо к лекарству, либо к концу.</p>
     </div>
@@ -696,6 +716,39 @@
       <div class="spoiler-card" onclick="this.classList.toggle('revealed')">
         <div class="spoiler-tag pixel-font">СПОЙЛЕР 06</div>
         <div class="spoiler-text">У Калдерона будет секретная концовка, если пройти всю игру, ни разу не потеряв бойца.</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tab-faq" class="tab-pane">
+    <div class="section-label pixel-font">ЧАСТЫЕ ВОПРОСЫ // БРИФИНГ ДЛЯ НОВИЧКОВ</div>
+    <h2>FAQ</h2>
+    <p style="font-size:19px; color:#c9c4a8; margin-bottom:20px;">Нажми на вопрос, чтобы открыть ответ.</p>
+
+    <div class="faq-list">
+      <div class="faq-item" onclick="this.classList.toggle('open')">
+        <div class="faq-q pixel-font">На чём делается игра?</div>
+        <div class="faq-a">Strike Pixel разрабатывается в GameMaker. Этот сайт -- фан-страница проекта, а не сама игра.</div>
+      </div>
+      <div class="faq-item" onclick="this.classList.toggle('open')">
+        <div class="faq-q pixel-font">Когда выйдет игра?</div>
+        <div class="faq-a">Точной даты пока нет -- проект в разработке. Следи за вкладкой «СПОЙЛЕРЫ» и терминалом, там появляются новости первыми.</div>
+      </div>
+      <div class="faq-item" onclick="this.classList.toggle('open')">
+        <div class="faq-q pixel-font">На каких платформах будет игра?</div>
+        <div class="faq-a">Это решается по ходу разработки. Как только определимся -- добавим сюда.</div>
+      </div>
+      <div class="faq-item" onclick="this.classList.toggle('open')">
+        <div class="faq-q pixel-font">Кто делает игру?</div>
+        <div class="faq-a">Команда MailGames -- см. подпись внизу сайта.</div>
+      </div>
+      <div class="faq-item" onclick="this.classList.toggle('open')">
+        <div class="faq-q pixel-font">Можно ли предложить идею для игры?</div>
+        <div class="faq-a">Да! Идеи по врагам, отряду и сюжету только приветствуются -- часть контента на этом сайте уже родилась именно так.</div>
+      </div>
+      <div class="faq-item" onclick="this.classList.toggle('open')">
+        <div class="faq-q pixel-font">Что за пасхалки на сайте?</div>
+        <div class="faq-a">На сайте спрятано несколько секретов -- в терминале, и не только. Ищи сам, подсказок не будет.</div>
       </div>
     </div>
   </div>
@@ -1003,6 +1056,5 @@
     document.getElementById('konamiOverlay').classList.remove('show');
   }
 </script>
-
 </body>
-</html>   
+</html>                                                                                                                                            </html>
