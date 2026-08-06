@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>STRIKE PIXEL: ЗАРАЖЕНИЕ — пиксельная игра про выживание в зомби-апокалипсисе</title>
-<meta name="description" content="STRIKE PIXEL: ЗАРАЖЕНИЕ — постапокалиптическая пиксельная игра про выживание в заражённом городе. Отряд, враги, карта радиации и живая история проекта в разработке.">
+<title>STRIKE PIXEL: ЗАРАЖЕНИЕ — официальный путеводитель по игре</title>
+<meta name="description" content="STRIKE PIXEL: ЗАРАЖЕНИЕ — постапокалиптическая пиксельная игра про выживание в заражённом городе. Отряд, враги, миссии, карта радиации и путеводитель по разработке.">
 <meta name="keywords" content="Strike Pixel, зомби игра, пиксельная игра, survival игра, зомби апокалипсис, инди игра, пиксель арт">
 <meta name="author" content="Малик">
 <meta name="robots" content="index, follow">
@@ -12,8 +12,8 @@
 
 <!-- Open Graph / соцсети -->
 <meta property="og:type" content="website">
-<meta property="og:title" content="STRIKE PIXEL: ЗАРАЖЕНИЕ — пиксельная игра про выживание в зомби-апокалипсисе">
-<meta property="og:description" content="Отряд выживших, база данных врагов, карта радиации. Проект в разработке — следи за статусом.">
+<meta property="og:title" content="STRIKE PIXEL: ЗАРАЖЕНИЕ — руководство по игре">
+<meta property="og:description" content="Отряд выживших, 10 длинных сюжетных миссий, база данных врагов, карта радиации.">
 <meta property="og:locale" content="ru_RU">
 
 <!-- Twitter Card -->
@@ -29,7 +29,7 @@
   "description": "Постапокалиптическая пиксельная игра про выживание в заражённом городе.",
   "genre": ["Survival", "Horror"],
   "inLanguage": "ru",
-  "gamePlatform": "PC"
+  "gamePlatform": ["Windows", "Android", "macOS", "iOS"]
 }
 </script>
 
@@ -45,6 +45,8 @@
     --toxic-glow: #e04be0;
     --bone: #e8e4d8;
     --ink: #0d0f08;
+    --hotline-pink: #ff007f;
+    --hotline-cyan: #00ffff;
   }
   *{box-sizing:border-box;}
   html{scroll-behavior:smooth;}
@@ -56,6 +58,7 @@
     font-size:22px;
     image-rendering: pixelated;
     overflow-x:hidden;
+    transition: filter 0.3s ease;
   }
   ::selection{background:var(--blood-bright); color:var(--bone);}
   .pixel-font{font-family:'Press Start 2P', monospace;}
@@ -74,6 +77,10 @@
     pointer-events:none;
     z-index:9999;
     mix-blend-mode:multiply;
+  }
+
+  body.high-infection {
+    filter: contrast(1.2) saturate(1.3) hue-rotate(10deg);
   }
 
   /* ---------- HERO ---------- */
@@ -184,6 +191,22 @@
     background: rgba(13, 15, 8, 0.8);
     border: 2px dashed var(--swamp);
     padding: 8px 14px;
+  }
+
+  /* PLATFORMS BADGE */
+  .platform-bar {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 15px;
+    font-family: 'Press Start 2P', monospace;
+    font-size: 9px;
+    color: var(--toxic-glow);
+  }
+  .platform-tag {
+    background: #0d1208;
+    border: 1px solid var(--swamp);
+    padding: 4px 8px;
   }
 
   /* ---------- TABS SYSTEM ---------- */
@@ -344,8 +367,9 @@
     background: #050704; border: 2px solid var(--toxic); padding: 20px;
     font-family: 'VT323', monospace; color: var(--toxic-glow);
     box-shadow: inset 0 0 15px rgba(160,32,160,0.2); margin-top: 15px;
+    transition: all 0.3s ease;
   }
-  .terminal-output { min-height: 120px; max-height: 200px; overflow-y: auto; margin-bottom: 15px; font-size: 20px; line-height: 1.4; }
+  .terminal-output { min-height: 140px; max-height: 220px; overflow-y: auto; margin-bottom: 15px; font-size: 20px; line-height: 1.4; }
   .terminal-controls { display: flex; gap: 10px; flex-wrap: wrap; }
   .terminal-btn {
     background: var(--swamp-dark); border: 1px solid var(--toxic); color: var(--bone);
@@ -365,7 +389,30 @@
   }
   .terminal-input::placeholder{ color:#6b4b6b; }
 
-  /* Screen glitch on secret command */
+  /* РЕЖИМЫ ПАСХАЛОК В ТЕРМИНАЛЕ */
+  body.undertale-mode {
+    background: #000 !important;
+    color: #fff !important;
+  }
+  body.undertale-mode .terminal-box {
+    border-color: #fff !important;
+    box-shadow: 0 0 15px #fff !important;
+  }
+  body.hotline-mode {
+    animation: hotlineShake 0.15s infinite;
+  }
+  body.hotline-mode .terminal-box {
+    border-color: var(--hotline-pink) !important;
+    background: #1a001a !important;
+    box-shadow: 0 0 25px var(--hotline-pink), inset 0 0 15px var(--hotline-cyan) !important;
+    color: var(--hotline-cyan) !important;
+  }
+  @keyframes hotlineShake {
+    0% { transform: translate(2px, 1px) rotate(0deg); }
+    50% { transform: translate(-1px, -2px) rotate(-0.5deg); }
+    100% { transform: translate(1px, 2px) rotate(0.5deg); }
+  }
+
   @keyframes screenGlitch{
     0%{ filter:none; transform:translate(0,0); }
     20%{ filter:hue-rotate(90deg) contrast(1.4); transform:translate(-3px,2px); }
@@ -375,7 +422,6 @@
   }
   body.screen-glitch{ animation: screenGlitch 0.4s steps(2); }
 
-  /* Katana Zero nod - neon flash */
   @keyframes neonFlashKf{
     0%{ filter:none; }
     25%{ filter: saturate(2.2) hue-rotate(260deg) brightness(1.15); }
@@ -385,7 +431,6 @@
   }
   body.neon-flash{ animation: neonFlashKf 0.9s ease-in-out; }
 
-  /* Konami code overlay */
   .konami-overlay{
     position:fixed; inset:0; z-index:20000;
     background:rgba(5,7,4,0.95);
@@ -407,25 +452,46 @@
   .konami-text{ font-size:20px; color:#c9c4a8; margin:10px 0; }
   .konami-lore{ font-size:12px; color:var(--bone); line-height:1.8; margin:20px 0; }
 
-  /* ---------- SPOILERS ---------- */
+  /* ---------- SPOILERS & MISSIONS ---------- */
+  .spoiler-controls {
+    display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap;
+  }
+  .spoiler-filter-btn {
+    background: #141a0c; border: 2px solid var(--swamp); color: var(--bone);
+    font-family: 'Press Start 2P', monospace; font-size: 9px; padding: 10px 14px; cursor: pointer;
+  }
+  .spoiler-filter-btn.active {
+    background: var(--blood); border-color: var(--blood-bright); color: #fff;
+  }
+  .spoiler-counter {
+    font-family: 'Press Start 2P', monospace; font-size: 10px; color: var(--toxic-glow);
+    margin-bottom: 20px; background: rgba(5,7,4,0.8); padding: 10px; border: 1px dashed var(--toxic);
+    display: inline-block;
+  }
+
   .spoiler-grid{
-    display:grid; grid-template-columns:repeat(auto-fit, minmax(240px,1fr)); gap:20px;
+    display:grid; grid-template-columns:repeat(auto-fit, minmax(280px,1fr)); gap:20px;
   }
   .spoiler-card{
     background:#141a0c; border:3px solid var(--blood); padding:20px;
-    cursor:pointer; position:relative; min-height:110px;
+    cursor:pointer; position:relative; min-height:140px;
     box-shadow: 5px 5px 0 var(--ink);
+    display: flex; flex-direction: column; justify-content: space-between;
   }
+  .spoiler-card.mission-type { border-color: var(--swamp); }
+  .spoiler-card.mission-type .spoiler-tag { color: var(--toxic-glow); }
+  
   .spoiler-tag{ font-size:10px; color:var(--blood-bright); margin-bottom:10px; letter-spacing:1px; }
+  .spoiler-title-inline { font-family: 'Press Start 2P', monospace; font-size: 11px; color: var(--bone); margin-bottom: 8px; }
   .spoiler-text{
-    font-size:19px; line-height:1.4; color:#d8d4bf;
+    font-size:18px; line-height:1.45; color:#d8d4bf;
     filter: blur(6px); user-select:none; transition: filter .25s ease;
   }
   .spoiler-card::after{
-    content:"нажми, чтобы прочитать";
+    content:"[ РАССЕКРЕТИТЬ ]";
     position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
     font-family:'Press Start 2P', monospace; font-size:10px; color:var(--toxic-glow);
-    text-align:center; padding:20px; background:rgba(13,15,8,0.55);
+    text-align:center; padding:20px; background:rgba(13,15,8,0.75);
     opacity:1; transition:opacity .25s ease;
   }
   .spoiler-card.revealed .spoiler-text{ filter:none; user-select:auto; }
@@ -507,6 +573,13 @@
   <p class="tagline">Город пал за одну ночь. Осталась одна команда, готовая идти туда, откуда не возвращаются.</p>
   
   <div class="countdown-box" id="countdown">ДО ВЫХОДА ЗОНЫ: СЧИТАЕМ ВРЕМЯ...</div>
+
+  <div class="platform-bar">
+    <span class="platform-tag">WINDOWS</span>
+    <span class="platform-tag">ANDROID</span>
+    <span class="platform-tag">MACOS</span>
+    <span class="platform-tag">IOS</span>
+  </div>
 
   <div class="hero-actions">
     <button class="pixel-btn" onclick="shareSite()">[ СКОПИРОВАТЬ ССЫЛКУ ]</button>
@@ -592,70 +665,62 @@
       <div class="enemy-card">
         <div class="threat">УГРОЗА: СРЕДНЯЯ</div>
         <h3>Зомби-сталкер</h3>
-        <p>Носит старую противогазную маску и плюётся кислотой на расстоянии. Быстро бегает, умеет запрыгивать на препятствия, царапается и кусается -- но здоровья у него немного.</p>
+        <p>Носит старую противогазную маску и плюётся кислотой на расстоянии. Быстро бегает, умеет запрыгивать на препятствия.</p>
       </div>
       <div class="enemy-card">
         <div class="threat">УГРОЗА: ВЫСОКАЯ</div>
         <h3>Палач</h3>
-        <p>Тяжёлый противник с топором в руках. Бегать не умеет, зато держит огромный запас здоровья и одним ударом решает исход ближнего боя.</p>
+        <p>Тяжёлый противник с топором в руках. Бегать не умеет, зато держит огромный запас здоровья.</p>
       </div>
       <div class="enemy-card">
         <div class="threat">УГРОЗА: ВЫСОКАЯ</div>
         <h3>Безликий</h3>
-        <p>Не видит и не слышит, кусаться не может -- но заражает одним царапаньем и разгоняется до 40 км/ч. Спастись бегством от него не получится.</p>
+        <p>Не видит и не слышит, но заражает одним царапаньем и разгоняется до 40 км/ч.</p>
       </div>
       <div class="enemy-card">
         <div class="threat">УГРОЗА: СРЕДНЯЯ</div>
         <h3>Вздутый</h3>
-        <p>Медлительный и не умеет бегать, зато при смерти взрывается кислотой, нанося до 30 урона всем поблизости. Может схватить жертву и швырнуть на землю.</p>
+        <p>Медлительный, зато при смерти взрывается кислотой, нанося урон всем поблизости.</p>
       </div>
       <div class="enemy-card">
         <div class="threat">УГРОЗА: ВЫСОКАЯ</div>
         <h3>Душитель</h3>
-        <p>Криворукое и кривоногое существо. Двигается странно и неуклюже, но стоит ему схватить жертву -- он душит голыми руками, не оставляя шанса вырваться.</p>
+        <p>Двигается странно и неуклюже, но стоит ему схватить жертву -- он душит голыми руками.</p>
       </div>
       <div class="enemy-card">
         <div class="threat">УГРОЗА: ВЫСОКАЯ</div>
         <h3>Берсерк</h3>
-        <p>Ходит в окровавленном халате, вооружён ножом и одной мутировавшей рукой, которой пронзает противников. Бегать не может, но здоровья у него в избытке.</p>
+        <p>Ходит в окровавленном халате, вооружён ножом и одной мутировавшей рукой.</p>
       </div>
       <div class="enemy-card">
         <div class="threat">УГРОЗА: НИЗКАЯ</div>
         <h3>Обычный зомби</h3>
-        <p>Самый рядовой заражённый: кусается, царапается, бегает небыстро. Всего 50 очков здоровья, но опасен большими группами.</p>
+        <p>Рядовой заражённый: кусается, царапается, опасен только в составе орды.</p>
       </div>
       <div class="enemy-card">
         <div class="threat">УГРОЗА: НИЗКАЯ</div>
         <h3>Ползун</h3>
-        <p>Ноги отказали ещё на ранней стадии заражения, поэтому передвигается по земле. Медленный и слабый, но подкрадывается почти бесшумно и хватает за ноги.</p>
+        <p>Ноги отказали, передвигается по земле. Медленный, но хватает за ноги.</p>
       </div>
       <div class="enemy-card">
         <div class="threat">УГРОЗА: НИЗКАЯ</div>
         <h3>Толстяк</h3>
-        <p>Раздутое и неповоротливое тело. Бегать не умеет и бьёт слабо, зато обладает на удивление большим запасом здоровья для рядового зомби.</p>
+        <p>Раздутое тело. Медлительный, но выдерживает много урона.</p>
       </div>
       <div class="enemy-card">
         <div class="threat">УГРОЗА: СРЕДНЯЯ</div>
         <h3>Психопат</h3>
-        <p>Руки туго связаны, зато выносливости хватает надолго. Кусается, если подобраться слишком близко, и почти не устаёт от погони.</p>
+        <p>Связанные руки, кусается при приближении и не устаёт от погони.</p>
       </div>
       <div class="enemy-card">
         <div class="threat">УГРОЗА: ВЫСОКАЯ</div>
         <h3>Ведьма</h3>
-        <p>Быстрая и хитрая -- призывает на помощь обычных зомби и способна стать невидимой на 10 секунд, чтобы зайти со спины.</p>
+        <p>Призывает зомби и умеет становиться невидимой на 10 секунд.</p>
       </div>
       <div class="enemy-card">
         <div class="threat">УГРОЗА: НЕИЗВЕСТНА</div>
         <h3>Пациент Ноль</h3>
-        <p>Первый заражённый. Его никто не видел живьём -- только следы. Возможно, именно он и есть источник вспышки.</p>
-      </div>
-    </div>
-
-    <div class="terminal-box" style="margin-top:30px;">
-      <div class="section-label pixel-font" style="margin-bottom:14px;">СИМУЛЯТОР // СЛУЧАЙНАЯ ВСТРЕЧА</div>
-      <div class="terminal-output" id="encounterOutput">> Нажми кнопку, чтобы узнать, кто вышел навстречу отряду из темноты...</div>
-      <div class="terminal-controls">
-        <button class="terminal-btn" onclick="rollEncounter()">[ КОГО МЫ ВСТРЕТИЛИ? ]</button>
+        <p>Первый заражённый. Его никто не видел живьём -- только следы.</p>
       </div>
     </div>
   </div>
@@ -688,34 +753,120 @@
   </div>
 
   <div id="tab-spoilers" class="tab-pane">
-    <div class="section-label pixel-font">УТЕЧКА // НЕ ДЛЯ ПОСТОРОННИХ ГЛАЗ</div>
-    <h2>Спойлеры разработки</h2>
-    <p style="font-size:19px; color:#c9c4a8; margin-bottom:20px;">Эти карточки размыты специально. Нажми на любую, если готов узнать больше, чем должен.</p>
+    <div class="section-label pixel-font">УТЕЧКА // ДАННЫЕ ИЗ БУНКЕРА</div>
+    <h2>Спойлеры разработки и Длинные Миссии</h2>
+    <p style="font-size:19px; color:#c9c4a8; margin-bottom:15px;">В игре запланировано 10 массивных сюжетных миссий и 10 ключевых тайн истории. Карточки зашифрованы. Нажимай, чтобы разблокировать.</p>
+
+    <div class="spoiler-counter" id="spoilerCounter">РАССЕКРЕЧЕНО: 0 / 20 ФАЙЛОВ</div>
+
+    <div class="spoiler-controls">
+      <button class="spoiler-filter-btn active" onclick="filterSpoilers('all')">[ ВСЕ ФАЙЛЫ (20) ]</button>
+      <button class="spoiler-filter-btn" onclick="filterSpoilers('mission')">[ 10 МИССИЙ ]</button>
+      <button class="spoiler-filter-btn" onclick="filterSpoilers('lore')">[ 10 ТАЙН СЮЖЕТА ]</button>
+    </div>
 
     <div class="spoiler-grid">
-      <div class="spoiler-card" onclick="this.classList.toggle('revealed')">
-        <div class="spoiler-tag pixel-font">СПОЙЛЕР 01</div>
-        <div class="spoiler-text">Пациент Ноль -- не первая жертва вспышки. Он был первым, кто согласился на эксперимент добровольно.</div>
+      <!-- 10 ДЛИННЫХ МИССИЙ -->
+      <div class="spoiler-card mission-type" onclick="toggleCard(this)">
+        <div class="spoiler-tag pixel-font">МИССИЯ 01 // ВВОДНАЯ</div>
+        <div class="spoiler-title-inline">«Ночь Падения»</div>
+        <div class="spoiler-text">Длинный 40-минутный этап эвакуации из горящего пригорода. Отряд пробивается сквозь шоссе, забитое машинными заторами. Финал миссии — защита сломанного броневика от 3 волн Бегунов, пока Айрис чинит двигатель под огнём.</div>
       </div>
-      <div class="spoiler-card" onclick="this.classList.toggle('revealed')">
-        <div class="spoiler-tag pixel-font">СПОЙЛЕР 02</div>
-        <div class="spoiler-text">В финале игроку предстоит выбор: уничтожить единственный прототип антидота или попытаться спасти заражённый город целиком.</div>
+
+      <div class="spoiler-card mission-type" onclick="toggleCard(this)">
+        <div class="spoiler-tag pixel-font">МИССИЯ 02 // СТЕЛС</div>
+        <div class="spoiler-text">«Тёмные Кварталы». Зачистка жилого массива в абсолютной темноте. Патронов нет, штамм заражённых здесь реагирует на звук. Отряд должен пройти через 5 этажей многоэтажки, используя отвлекающие звуковые шумихи и световые шашки.</div>
       </div>
-      <div class="spoiler-card" onclick="this.classList.toggle('revealed')">
-        <div class="spoiler-tag pixel-font">СПОЙЛЕР 03</div>
-        <div class="spoiler-text">Айрис знал про лабораторию ещё до вспышки -- и умолчал об этом перед отрядом.</div>
+
+      <div class="spoiler-card mission-type" onclick="toggleCard(this)">
+        <div class="spoiler-tag pixel-font">МИССИЯ 03 // ШТУРМ</div>
+        <div class="spoiler-text">«Торговый Центр: Осада». Грандиозная вылазка за медикаментами. Игроку предстоит забаррикадировать стеклянные атриумы, распределить позиции отряда и пережить первое появление Крикунов и Громил.</div>
       </div>
-      <div class="spoiler-card" onclick="this.classList.toggle('revealed')">
-        <div class="spoiler-tag pixel-font">СПОЙЛЕР 04</div>
-        <div class="spoiler-text">Рихтер способен временно замедлять восприятие времени в момент прицельного выстрела -- геймплейная фишка снайпера.</div>
+
+      <div class="spoiler-card mission-type" onclick="toggleCard(this)">
+        <div class="spoiler-tag pixel-font">МИССИЯ 04 // ПОДЗЕМЕЛЬЕ</div>
+        <div class="spoiler-text">«Тоннели Метро». Длинная рейд-миссия в затопленной подземке. Включает навигацию на дрезине, поиск вентиляционных шашек в ядовитом тумане и побег от Безликого, разогнавшегося до 40 км/ч.</div>
       </div>
-      <div class="spoiler-card" onclick="this.classList.toggle('revealed')">
-        <div class="spoiler-tag pixel-font">СПОЙЛЕР 05</div>
-        <div class="spoiler-text">Помимо промзоны, в игре появится вторая, полностью затопленная зона города -- с собственными видами заражённых.</div>
+
+      <div class="spoiler-card mission-type" onclick="toggleCard(this)">
+        <div class="spoiler-tag pixel-font">МИССИЯ 05 // БОСС-ФАЙТ</div>
+        <div class="spoiler-text">«Красный Завод». Масштабная локация с цехами и плавильнями. Отряду предстоит выследить Палача и устроить на него ловушку с помощью заводских прессов и взрывоопасных контейнеров.</div>
       </div>
-      <div class="spoiler-card" onclick="this.classList.toggle('revealed')">
-        <div class="spoiler-tag pixel-font">СПОЙЛЕР 06</div>
-        <div class="spoiler-text">У Калдерона будет секретная концовка, если пройти всю игру, ни разу не потеряв бойца.</div>
+
+      <div class="spoiler-card mission-type" onclick="toggleCard(this)">
+        <div class="spoiler-tag pixel-font">МИССИЯ 06 // СНАЙПЕРСКАЯ</div>
+        <div class="spoiler-text">«Высота 104». Миссия, целиком сфокусированная на Рихтере. Отряд прикрывает снайпера, пока тот позиционируется на телебашне и прикрывает продвижение выживших через зачищаемый плотиной район.</div>
+      </div>
+
+      <div class="spoiler-card mission-type" onclick="toggleCard(this)">
+        <div class="spoiler-tag pixel-font">МИССИЯ 07 // ВОДНАЯ ЗОНА</div>
+        <div class="spoiler-text">«Затопленный Город». Исследование затонувших улиц на моторной лодке. Включает подбор топлива, борьбу с подводными Ползунами и избегание ловушек невидимой Ведьмы.</div>
+      </div>
+
+      <div class="spoiler-card mission-type" onclick="toggleCard(this)">
+        <div class="spoiler-tag pixel-font">МИССИЯ 08 // РАДИАЦИЯ</div>
+        <div class="spoiler-text">«Мёртвый Элеватор». Рейд в зону с высоким радиационным фоном. Игроку нужно постоянно следить за зарядом дозиметров отряда и чередовать бег с укрытием в свинцовых бункерах.</div>
+      </div>
+
+      <div class="spoiler-card mission-type" onclick="toggleCard(this)">
+        <div class="spoiler-tag pixel-font">МИССИЯ 09 // ШТУРМ ЛАБОРАТОРИИ</div>
+        <div class="spoiler-text">«Периметр Дельта». Штурм укреплённого подземного комплекса. Бои в узких коридорах с Берсерками и Вздутыми. Отряд активирует 3 генератора, чтобы открыть главную гермодверь.</div>
+      </div>
+
+      <div class="spoiler-card mission-type" onclick="toggleCard(this)">
+        <div class="spoiler-tag pixel-font">МИССИЯ 10 // ФИНАЛ</div>
+        <div class="spoiler-text">«Эпицентр: Пациент Ноль». Финальная 60-минутная операция внутри ядра лаборатории. Двухфазный бой с Пациентом Ноль и принятие решения о судьбе города.</div>
+      </div>
+
+      <!-- 10 ДЛИННЫХ СПОЙЛЕРОВ СЮЖЕТА -->
+      <div class="spoiler-card lore-type" onclick="toggleCard(this)">
+        <div class="spoiler-tag pixel-font">ТАЙНА 01</div>
+        <div class="spoiler-text">Пациент Ноль -- не первая жертва вспышки. Он был ведущим вирусологом, согласившимся ввести прототип штамма, чтобы доказать его безопасность.</div>
+      </div>
+
+      <div class="spoiler-card lore-type" onclick="toggleCard(this)">
+        <div class="spoiler-tag pixel-font">ТАЙНА 02</div>
+        <div class="spoiler-text">В игре предусмотрены 3 финала: «Зачистка Зоны» (взрыв лаборатории вместе с отрядом), «Спасение Штамма» (передача антидота военным) и секретная концовка Калдерона.</div>
+      </div>
+
+      <div class="spoiler-card lore-type" onclick="toggleCard(this)">
+        <div class="spoiler-tag pixel-font">ТАЙНА 03</div>
+        <div class="spoiler-text">Айрис работал на корпорацию, создавшую вирус. Его главная скрытая цель — не просто вылечить город, а уничтожить все жесткие диски с протоколами исследований.</div>
+      </div>
+
+      <div class="spoiler-card lore-type" onclick="toggleCard(this)">
+        <div class="spoiler-tag pixel-font">ТАЙНА 04</div>
+        <div class="spoiler-text">Рихтер теряет зрение из-за радиации, поэтому его механика замедления времени — это не суперспособность, а обострение слуха и тактильного чутья.</div>
+      </div>
+
+      <div class="spoiler-card lore-type" onclick="toggleCard(this)">
+        <div class="spoiler-tag pixel-font">ТАЙНА 05</div>
+        <div class="spoiler-text">Заражение мутирует прямо во время игры: если часто использовать шумное оружие на одной локации, в следующих миссиях появится больше Крикунов.</div>
+      </div>
+
+      <div class="spoiler-card lore-type" onclick="toggleCard(this)">
+        <div class="spoiler-tag pixel-font">ТАЙНА 06</div>
+        <div class="spoiler-text">Секретная концовка Калдерона откроется только если ни один боец не получит тяжелых ранений за все 10 миссий. В ней отряд эвакуируется на вертолете за пределы континента.</div>
+      </div>
+
+      <div class="spoiler-card lore-type" onclick="toggleCard(this)">
+        <div class="spoiler-tag pixel-font">ТАЙНА 07</div>
+        <div class="spoiler-text">Безликие изначально разрабатывались как био-оружие против боевой техники: их ногти выделяют фермент, разъедающий бронированную сталь за секунды.</div>
+      </div>
+
+      <div class="spoiler-card lore-type" onclick="toggleCard(this)">
+        <div class="spoiler-tag pixel-font">ТАЙНА 08</div>
+        <div class="spoiler-text">В затопленной зоне города скрыт пасхальный бункер, в котором можно найти кассету с аудиодневниками первой эвакуационной группы.</div>
+      </div>
+
+      <div class="spoiler-card lore-type" onclick="toggleCard(this)">
+        <div class="spoiler-tag pixel-font">ТАЙНА 09</div>
+        <div class="spoiler-text">Ведьма — единственный заражённый, который сохранил обрывки человеческого разума: при невидимости она шепчет имена членов отряда из темноты.</div>
+      </div>
+
+      <div class="spoiler-card lore-type" onclick="toggleCard(this)">
+        <div class="spoiler-tag pixel-font">ТАЙНА 10</div>
+        <div class="spoiler-text">После прохождения 10 миссий открывается режим «Новая Игра+», где все враги меняют паттерны атак, а карта радиации генерируется случайным образом.</div>
       </div>
     </div>
   </div>
@@ -728,23 +879,23 @@
     <div class="faq-list">
       <div class="faq-item" onclick="this.classList.toggle('open')">
         <div class="faq-q pixel-font">На чём делается игра?</div>
-        <div class="faq-a">Strike Pixel разрабатывается в GameMaker. Этот сайт -- фан-страница проекта, а не сама игра.</div>
+        <div class="faq-a">Strike Pixel разрабатывается в GameMaker. Этот сайт -- руководство и база данных проекта.</div>
       </div>
       <div class="faq-item" onclick="this.classList.toggle('open')">
         <div class="faq-q pixel-font">Когда выйдет игра?</div>
         <div class="faq-a">Точной даты пока нет -- проект в разработке. Следи за вкладкой «СПОЙЛЕРЫ» и терминалом, там появляются новости первыми.</div>
       </div>
       <div class="faq-item" onclick="this.classList.toggle('open')">
-        <div class="faq-q pixel-font">На каких платформах будет игра?</div>
-        <div class="faq-a">Это решается по ходу разработки. Как только определимся -- добавим сюда.</div>
+        <div class="faq-q pixel-font">На каких платформах выйдет игра?</div>
+        <div class="faq-a">Релиз планируется на <strong>Windows</strong>, <strong>Android</strong>, <strong>macOS</strong> и <strong>iOS</strong>.</div>
       </div>
       <div class="faq-item" onclick="this.classList.toggle('open')">
         <div class="faq-q pixel-font">Кто делает игру?</div>
         <div class="faq-a">Команда MailGames -- см. подпись внизу сайта.</div>
       </div>
       <div class="faq-item" onclick="this.classList.toggle('open')">
-        <div class="faq-q pixel-font">Можно ли предложить идею для игры?</div>
-        <div class="faq-a">Да! Идеи по врагам, отряду и сюжету только приветствуются -- часть контента на этом сайте уже родилась именно так.</div>
+        <div class="faq-q pixel-font">Сколько всего миссий будет в игре?</div>
+        <div class="faq-a">В игре запланировано 10 длинных сюжетных миссий с уникальными механиками и боссами. Смотри вкладку «СПОЙЛЕРЫ».</div>
       </div>
       <div class="faq-item" onclick="this.classList.toggle('open')">
         <div class="faq-q pixel-font">Что за пасхалки на сайте?</div>
@@ -782,7 +933,7 @@
 
 <footer>
   <div class="footer-title">STRIKE PIXEL: ЗАРАЖЕНИЕ</div>
-  фан-страница проекта · с уважением команда MailGames
+  руководство проекта · с уважением команда MailGames
 </footer>
 
 <script>
@@ -806,7 +957,6 @@
     }
   }
 
-  // Web Audio API Ambient Generator (бункерный гул)
   let audioCtx = null;
   let ambientOsc = null;
   let ambientGain = null;
@@ -822,8 +972,7 @@
         ambientGain = audioCtx.createGain();
         
         ambientOsc.type = 'sine';
-        ambientOsc.frequency.setValueAtTime(55, audioCtx.currentTime); // Низкий зловещий гул (нота Ля контроктавы)
-        
+        ambientOsc.frequency.setValueAtTime(55, audioCtx.currentTime);
         ambientGain.gain.setValueAtTime(0.08, audioCtx.currentTime);
         
         ambientOsc.connect(ambientGain);
@@ -848,21 +997,29 @@
     }
   }
 
-  function playBeep() {
+  function playBeep(freq = 440, duration = 0.05, type = 'square') {
     try {
       const tempCtx = new (window.AudioContext || window.webkitAudioContext)();
       const osc = tempCtx.createOscillator();
       const gain = tempCtx.createGain();
-      osc.type = 'square';
-      osc.frequency.setValueAtTime(440, tempCtx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(880, tempCtx.currentTime + 0.05);
+      osc.type = type;
+      osc.frequency.setValueAtTime(freq, tempCtx.currentTime);
       gain.gain.setValueAtTime(0.05, tempCtx.currentTime);
-      gain.gain.linearRampToValueAtTime(0.01, tempCtx.currentTime + 0.05);
+      gain.gain.linearRampToValueAtTime(0.01, tempCtx.currentTime + duration);
       osc.connect(gain);
       gain.connect(tempCtx.destination);
       osc.start();
-      osc.stop(tempCtx.currentTime + 0.05);
+      osc.stop(tempCtx.currentTime + duration);
     } catch(e) {}
+  }
+
+  function playMegalovaniaJingle() {
+    const notes = [293.66, 293.66, 587.33, 440, 415.30, 392.00, 349.23, 293.66, 349.23, 392.00];
+    let time = 0;
+    notes.forEach((freq) => {
+      setTimeout(() => playBeep(freq, 0.08, 'square'), time);
+      time += 120;
+    });
   }
 
   function termCommand(cmd) {
@@ -870,6 +1027,9 @@
     const out = document.getElementById('terminalOutput');
     let text = "";
     const c = cmd.trim().toLowerCase();
+
+    document.body.classList.remove('undertale-mode', 'hotline-mode');
+
     if(c === 'scan') {
       text = "> [УСПЕХ] Обнаружено 3 выживших в радиусе 12км. Уровень заражения: КРИТИЧЕСКИЙ.";
     } else if(c === 'purge') {
@@ -879,13 +1039,30 @@
     } else if(c === 'map' || c === 'карта') {
       text = "> [КАРТА] Спутниковый снимок зоны доступен во вкладке «05. КАРТА».";
     } else if(c === 'help' || c === 'помощь') {
-      text = "> Команды: scan, database, map, purge, help. ...и, возможно, есть команды, которых нет в этом списке.";
+      text = "> Команды: scan, database, map, purge, help, mailgames. ...и, возможно, есть команды, которых нет в этом списке.";
+    } else if(c === 'mailgames' || c === 'малик') {
+      text = "> [РАЗРАБОТЧИКИ] Команда MailGames приветствует тебя! Спасибо за интерес к проекту Strike Pixel: Заражение.";
     } else if(c === 'кто такой пациент ноль' || c === 'пациент ноль' || c === 'patient zero' || c === 'zero') {
       text = "> [ДОСТУП ОГРАНИЧЕН] Файл повреждён. Видно только одну строку: «...он был первым добровольцем...» [ОСТАЛЬНОЕ УДАЛЕНО]";
       glitchScreen();
     } else if(c === 'katana' || c === 'katana zero' || c === 'катана' || c === 'катана зеро') {
       text = "> [ПОСТОРОННИЙ СИГНАЛ] Кто-то взломал канал из другой реальности... Неон, додзё, флешбэк на 3 секунды назад. Похоже, тут кто-то любит замедлять время так же, как и мы.";
       neonFlash();
+    } else if(c === 'sans' || c === 'санс' || c === 'undertale' || c === 'bad time') {
+      document.body.classList.add('undertale-mode');
+      playMegalovaniaJingle();
+      text = "> [DETERMINATION] Вы чувствуете, как грехи взваливаются вам на спину... Слышен далекий костяной смех.";
+    } else if(c === 'papyrus' || c === 'папайрус' || c === 'папирус') {
+      playBeep(300, 0.2, 'triangle');
+      text = "> [NYEH HEH HEH!] В терминале обнаружена тарелка спагетти. Она выглядит... очень стойкой.";
+    } else if(c === 'hotline' || c === 'hotline miami' || c === 'хотлайн' || c === 'richard' || c === 'курица') {
+      document.body.classList.add('hotline-mode');
+      playBeep(880, 0.3, 'sawtooth');
+      text = "> [ОТВЕТЧИК] «Тебе действительно нравится причинять вред другим людям?» Запустился неоновый режим 1989 года.";
+    } else if(c === 'jacket' || c === 'жакет' || c === 'маска') {
+      document.body.classList.add('hotline-mode');
+      playBeep(200, 0.1, 'sawtooth');
+      text = "> [КАССЕТНЫЙ МАГНИТОФОН] *Щёлк* «Следующее сообщение предназначено для... ВСЕХ ЗАРАЖЁННЫХ В ЗОНЕ».";
     } else if(c === '') {
       return;
     } else {
@@ -916,9 +1093,38 @@
     });
   }
 
-  // Timer simulation
+  let revealedCount = 0;
+  function toggleCard(card) {
+    playBeep();
+    if (!card.classList.contains('revealed')) {
+      card.classList.add('revealed');
+      revealedCount++;
+    } else {
+      card.classList.remove('revealed');
+      revealedCount--;
+    }
+    document.getElementById('spoilerCounter').textContent = `РАССЕКРЕЧЕНО: ${revealedCount} / 20 ФАЙЛОВ`;
+  }
+
+  function filterSpoilers(type) {
+    playBeep();
+    document.querySelectorAll('.spoiler-filter-btn').forEach(b => b.classList.remove('active'));
+    event.currentTarget.classList.add('active');
+
+    const cards = document.querySelectorAll('.spoiler-card');
+    cards.forEach(card => {
+      if (type === 'all') {
+        card.style.display = 'flex';
+      } else if (type === 'mission') {
+        card.style.display = card.classList.contains('mission-type') ? 'flex' : 'none';
+      } else if (type === 'lore') {
+        card.style.display = card.classList.contains('lore-type') ? 'flex' : 'none';
+      }
+    });
+  }
+
   function updateCountdown() {
-    const targetDate = new Date().getTime() + 14 * 24 * 60 * 60 * 1000; // 14 дней от текущего момента
+    const targetDate = new Date().getTime() + 14 * 24 * 60 * 60 * 1000;
     const now = new Date().getTime();
     const distance = targetDate - now;
     
@@ -938,6 +1144,12 @@
     const pct = docHeight > 0 ? Math.min(100, Math.round((scrollTop / docHeight) * 100)) : 0;
     fill.style.width = pct + '%';
     readout.textContent = 'ЗАРАЖЕНИЕ: ' + pct + '%';
+
+    if (pct >= 80) {
+      document.body.classList.add('high-infection');
+    } else {
+      document.body.classList.remove('high-infection');
+    }
   }
   window.addEventListener('scroll', updateInfection);
   updateInfection();
@@ -966,7 +1178,6 @@
   }
   typeLoop();
 
-  // ---------- RADIATION MAP ----------
   const radSectors = [
     {level:'safe', name:'Пригород', note:'Тихо, почти безопасно.'},
     {level:'safe', name:'База отряда', note:'Убежище Strike Pixel. Здесь можно отдышаться.'},
@@ -994,32 +1205,6 @@
       });
       radMapEl.appendChild(tile);
     }
-  }
-
-  // ---------- ENCOUNTER GENERATOR ----------
-  const encounterList = [
-    'Бегун выскакивает из-за угла с диким рёвом.',
-    'Громила проламывает стену в двух шагах от отряда.',
-    'Крикун замечает вас и запрокидывает голову -- сейчас будет визг.',
-    'Зомби-сталкер поднимает голову в противогазной маске и плюёт кислотой.',
-    'Палач медленно выходит из тени, волоча топор по земле.',
-    'Безликий разворачивается на звук шагов -- и срывается с места на полной скорости.',
-    'Вздутый покачивается навстречу -- лучше не подпускать его слишком близко.',
-    'Душитель неуклюже ковыляет вперёд, странно вывернув руки.',
-    'Берсерк вскидывает мутировавшую руку и делает шаг вперёд.',
-    'Обычный зомби бредёт прямо на отряд.',
-    'Ползун бесшумно подтягивается по земле и хватает за лодыжку.',
-    'Толстяк неповоротливо разворачивается на шум шагов.',
-    'Психопат с связанными руками щёлкает зубами издалека.',
-    'Ведьма хихикает где-то рядом -- а затем пропадает из виду.',
-    'Тишина. Сектор чист... пока что.'
-  ];
-  function rollEncounter(){
-    playBeep();
-    const out = document.getElementById('encounterOutput');
-    const pick = encounterList[Math.floor(Math.random()*encounterList.length)];
-    out.innerHTML += '<br>> ' + pick;
-    out.scrollTop = out.scrollHeight;
   }
 </script>
 
@@ -1056,5 +1241,5 @@
     document.getElementById('konamiOverlay').classList.remove('show');
   }
 </script>
-</body>
-</html>                                                                                                                                            </html>
+</body
+  </html>
