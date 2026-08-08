@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html lang="ru"> 
-<head>
+<html lang="ru">
+<head> 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>STRIKE PIXEL: ЗАРАЖЕНИЕ</title>
@@ -558,13 +558,19 @@ body{cursor:none;}
     </div>
     <div class="terminal-box" style="margin-top:30px;">
       <div class="section-label pixel-font" style="margin-bottom:14px;">БЕТА-ДОСТУП // РЕГИСТРАЦИЯ</div>
-      <div class="terminal-output" id="betaOutput">> Хочешь попасть в закрытый альфа-тест? Введи свой позывной ниже...</div>
-      <div class="terminal-input-row">
-        <span class="terminal-prompt pixel-font">&gt;</span>
-        <input type="text" id="betaInput" class="terminal-input" placeholder="введите позывной..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" enterkeyhint="send" onkeydown="if(event.key==='Enter')registerBeta()" onchange="registerBeta()">
-      </div>
-      <div class="terminal-controls">
-        <button class="terminal-btn" onclick="registerBeta()">[ ПОДАТЬ ЗАЯВКУ ]</button>
+      <div class="terminal-output" id="betaOutput">> Хочешь попасть в закрытый альфа-тест? Заполни форму ниже...</div>
+      <div class="beta-form" style="margin-top:15px;">
+        <div class="terminal-input-row" style="margin-bottom:10px;">
+          <span class="terminal-prompt pixel-font">&gt;</span>
+          <input type="text" id="betaNick" class="terminal-input" placeholder="твой ник..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+        </div>
+        <div class="terminal-input-row" style="margin-bottom:14px;">
+          <span class="terminal-prompt pixel-font">@</span>
+          <input type="text" id="betaTelegram" class="terminal-input" placeholder="telegram username..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+        </div>
+        <div class="terminal-controls">
+          <button class="terminal-btn" onclick="submitBeta()">[ ОТПРАВИТЬ ЗАЯВКУ ]</button>
+        </div>
       </div>
     </div>
   </div>
@@ -1145,17 +1151,48 @@ function toggleAmbient(){
       if(cap) cap.remove();
     }
   }
-  function registerBeta(){
+  // ===== Vercel API URL (вставь свой после деплоя) =====
+  const VERCEL_API_URL='https://strike-pixel.vercel.app/api/send'; // ЗАМЕНИ НА СВОЙ URL
+
+  async function submitBeta(){
     playBeep();
-    const inp=document.getElementById('betaInput');
+    const nickInp=document.getElementById('betaNick');
+    const tgInp=document.getElementById('betaTelegram');
     const out=document.getElementById('betaOutput');
-    const name=inp?inp.value.trim():'';
-    if(name.length<2){
+    const nick=nickInp?nickInp.value.trim():'';
+    const telegram=tgInp?tgInp.value.trim():'';
+
+    if(nick.length<2){
       out.innerHTML+='<br>> [ОШИБКА] Позывной слишком короткий. Минимум 2 символа.';
-    }else{
-      out.innerHTML+='<br>> [УСПЕХ] Позывной «'+name+'» зарегистрирован в системе.<br>> Статус: ОЖИДАНИЕ ПРОВЕРКИ. Мы свяжемся через терминал.';
-      unlockAch('beta');
-      if(inp) inp.value='';
+      out.scrollTop=out.scrollHeight;
+      return;
+    }
+    if(telegram.length<2){
+      out.innerHTML+='<br>> [ОШИБКА] Укажи Telegram username.';
+      out.scrollTop=out.scrollHeight;
+      return;
+    }
+
+    out.innerHTML+='<br>> [ОТПРАВКА] Передача данных на сервер MAIL GAMES...';
+    out.scrollTop=out.scrollHeight;
+
+    try{
+      const res=await fetch(VERCEL_API_URL,{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({nick:nick,telegram:telegram})
+      });
+      const data=await res.json();
+      if(data.success){
+        out.innerHTML+='<br>> [УСПЕХ] Заявка принята! Мы напишем, когда выйдет APK.<br>> Статус: ОЖИДАНИЕ ПРОВЕРКИ.';
+        unlockAch('beta');
+        if(nickInp) nickInp.value='';
+        if(tgInp) tgInp.value='';
+      }else{
+        out.innerHTML+='<br>> [ОШИБКА] '+ (data.error||'Сервер недоступен. Попробуй позже.');
+      }
+    }catch(e){
+      out.innerHTML+='<br>> [ОШИБКА] Нет связи с сервером. Проверь подключение или попробуй позже.<br>> Детали: '+e.message;
     }
     out.scrollTop=out.scrollHeight;
   }
@@ -1929,4 +1966,4 @@ function startAmbientMusic(){
 
 </script>
 </body>
-</html>
+  </html>
