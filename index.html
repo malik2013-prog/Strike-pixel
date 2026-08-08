@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="ru">
-<head> 
+<head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>STRIKE PIXEL: ЗАРАЖЕНИЕ</title>
@@ -559,19 +559,12 @@ body{cursor:none;}
     <div class="terminal-box" style="margin-top:30px;">
       <div class="section-label pixel-font" style="margin-bottom:14px;">БЕТА-ДОСТУП // РЕГИСТРАЦИЯ</div>
       <div class="terminal-output" id="betaOutput">> Хочешь попасть в закрытый альфа-тест? Заполни форму ниже...</div>
-      <div class="beta-form" style="margin-top:15px;">
-        <div class="terminal-input-row" style="margin-bottom:10px;">
-          <span class="terminal-prompt pixel-font">&gt;</span>
-          <input type="text" id="betaNick" class="terminal-input" placeholder="твой ник..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
-        </div>
-        <div class="terminal-input-row" style="margin-bottom:14px;">
-          <span class="terminal-prompt pixel-font">@</span>
-          <input type="text" id="betaTelegram" class="terminal-input" placeholder="telegram username..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
-        </div>
-        <div class="terminal-controls">
-          <button class="terminal-btn" onclick="submitBeta()">[ ОТПРАВИТЬ ЗАЯВКУ ]</button>
-        </div>
+      <div class="google-form-wrapper" style="margin-top:15px;background:#0a0c07;border:2px solid var(--toxic);overflow:hidden;">
+        <!-- ВСТАВЬ СЮДА IFRAME СВОЕЙ GOOGLE FORM -->
+        <!-- Инструкция: создай форму на forms.google.com → Нажми «Отправить» → «Встроить» → скопируй iframe-код -->
+        <iframe id="betaFormFrame" src="https://docs.google.com/forms/d/e/1FAIpQLSfIVW4CJPQWrITu8MsVfXR8ZuNMGWoHOyEGi8HLj4EbI6hO-g/viewform?embedded=true" width="100%" height="520" frameborder="0" marginheight="0" marginwidth="0" style="background:#0a0c07;filter:invert(0.9) hue-rotate(180deg);">Загрузка...</iframe>
       </div>
+      <p style="font-size:16px;color:var(--toxic-glow);margin-top:10px;text-align:center;">Заявки приходят мгновенно в Telegram бота MAIL GAMES</p>
     </div>
   </div>
 
@@ -1152,7 +1145,7 @@ function toggleAmbient(){
     }
   }
   // ===== Vercel API URL (вставь свой после деплоя) =====
-  const VERCEL_API_URL='https://strike-pixel.vercel.app/api/send'; // ЗАМЕНИ НА СВОЙ URL
+  const VERCEL_API_URL='https://strike-pixel-api.vercel.app/api/send'; // ЗАМЕНИ НА СВОЙ URL
 
   async function submitBeta(){
     playBeep();
@@ -1966,4 +1959,4 @@ function startAmbientMusic(){
 
 </script>
 </body>
-  </html>
+                                        </html>
